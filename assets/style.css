@@ -1,0 +1,20 @@
+header {
+    background-color: blueviolet;
+    color: white;
+
+}
+
+header h1 {
+    text-align: center;
+}
+
+
+.form-input {
+    width: 100%;
+    padding: 3%;
+    margin: 5px 0;
+    font-size: 1.2rem;
+    border: 2px solid var(--light-dark);
+    border-radius: var(--border-radius);
+}
+  
