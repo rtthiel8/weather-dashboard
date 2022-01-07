@@ -19,18 +19,27 @@
         <div class="col-12 col-md-4">
             
             <div class="card">
-                <h3>Search for a City:</h3>
-                <form>
-                    <label></label>
-                    <inout name="city" type="text" autofocus="true" class="form-input"></inout>
-                    <button type="submit" class="btn">Search</button>
+                <h3 class="card-header">Search for a City:</h3>
+                <form id="user-form" class="card-body">
+                  <label class="form-label" for="city"></label>
+                  <input name="city" id="city" type="text" autofocus="true" class="form-input" /><br>
+                  <button type="submit" class="btn">Search</button>
                 </form>
+              </div>
 
+        </div>
+
+        <div class="col-12 col-md-8">
+            <div id="weather-container">
+                <h3>show weather here</h3>
             </div>
         </div>
 
     </main>
 
+    <script src="./assets/script.js"></script>
+
 
 </body>
+
 </html>
