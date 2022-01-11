@@ -94,12 +94,20 @@ var displayWeather = function(data, searchTerm) {
     forecastContainerEl.textContent = "";
 
     // loop over data
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.list.length; i++) {
     // format data
-    var {name} = data[i];
+    var {dt_txt, main, wind} = data.list[i];
+//    console.log(data.list[i].main.temp);
 
     let output = `
-        <h5>${name}</h5>
+      <div class="card" style="width: 18rem;"> 
+        <div class="card-body"
+          <p class ="card-text">${dt_txt}</p>
+          <p class="card-text">Temp: ${main}</p>
+          <p class="card-text">Wind: ${wind}</p>
+          <p class="card-text">Humidity: </p>
+        </div>
+      </div>
     `
     document.getElementById("forecast-container").innerHTML += output;
 }
