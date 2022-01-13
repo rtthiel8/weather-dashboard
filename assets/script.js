@@ -13,7 +13,7 @@ var city = cityInputEl.value.trim();
 
     if (city) {
       getCityWeather(city);
-      getForecast(city);
+
       cityInputEl.value = "";
     } else {
       alert("Please enter a valid City");
@@ -28,8 +28,6 @@ var getCityWeather = function(city) {
     // make a request to the url
     fetch(apiUrl).then(function(response) {
       response.json().then(function(data) {
-          console.log(data)
-          getForecast(data)
             displayWeather(data, city);
       });
     });
@@ -38,14 +36,11 @@ var getCityWeather = function(city) {
 userFormEl.addEventListener("submit", formSubmitHandler);
 
 var displayWeather = function(data, searchTerm) {
-  const lat = data.coord.lat
-  const lon = data.coord.lon
-//    console.log(searchTerm);
+  const lat = data.coord.lat;
+  const lon = data.coord.lon;
     // clear old content
     weatherContainerEl.textContent = "";
     citySearchTerm.textContent = "Current Weather for: " + searchTerm + (" (") + dateToday + (")");
-
-//    var cityName = data.name;
 
     // create a container for each stat
     var weatherEl = document.createElement("div");
@@ -77,7 +72,7 @@ var displayWeather = function(data, searchTerm) {
 
   };
 
-  var getForecast = function(lat, lon) {
+var getForecast = function(lat, lon) {
     // format the api url
     var forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
     // make a request to the url
@@ -89,7 +84,7 @@ var displayWeather = function(data, searchTerm) {
     });
   };
 
-   var displayForecast = function(data) {
+var displayForecast = function(data) {
      console.log(data);
      // clear old content
      forecastContainerEl.textContent = "";
@@ -97,20 +92,20 @@ var displayWeather = function(data, searchTerm) {
      // loop over data
      for (var i = 0; i < data.daily.length; i++) {
 //     // format data
-//     var {dt, main, wind, weather} = data.daily[i];
+     var {dt, weather, temp, wind_speed, humidity} = data.daily[i];
      console.log(data.daily);
 
-//     let output = `
-//       <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
-//         <div class="card-body"
-//           <p class ="card-text">${dt}</p>
-//           <p>${weather.icon}</p>
-//           <p class="card-text">Temp: ${main.temp} °F</p>
-//           <p class="card-text">Wind: ${wind.speed} MPH</p>
-//           <p class="card-text">Humidity: ${main.humidity} %</p>
-//         </div>
-//       </div>
-//     `
-//     document.getElementById("forecast-container").innerHTML += output;
+    let output = `
+      <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
+        <div class="card-body"
+          <p class="card-text">${dt}</p>
+          <p class="card-text">${weather.icon}</p>
+          <p class="card-text">Temp: ${temp.day} °F</p>
+          <p class="card-text">Wind: ${wind_speed} MPH</p>
+          <p class="card-text">Humidity: ${humidity} %</p>
+        </div>
+      </div>
+    `
+    document.getElementById("forecast-container").innerHTML += output;
   }
   };
