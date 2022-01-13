@@ -36,11 +36,12 @@ var getCityWeather = function(city) {
 userFormEl.addEventListener("submit", formSubmitHandler);
 
 var displayWeather = function(data, searchTerm) {
-//    console.log(data);
+    console.log(data.coord.lat);
+    console.log(data.coord.lon);
 //    console.log(searchTerm);
     // clear old content
     weatherContainerEl.textContent = "";
-    citySearchTerm.textContent = searchTerm + (" (") + dateToday + (")");
+    citySearchTerm.textContent = "Current Weather for: " + searchTerm + (" (") + dateToday + (")");
 
 //    var cityName = data.name;
 
@@ -49,7 +50,7 @@ var displayWeather = function(data, searchTerm) {
     
     var currentTemp = data.main.temp;
     var currentTempEl = document.createElement("div");
-    currentTempEl.textContent = "Temp: " + currentTemp + " F";
+    currentTempEl.textContent = "Temp: " + currentTemp + " °F";
     weatherEl.appendChild(currentTempEl);
 
     var windSpeed = data.wind.speed;
@@ -75,7 +76,7 @@ var displayWeather = function(data, searchTerm) {
 
   var getForecast = function(city) {
     // format the api url
-    var forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
+    var forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + city.coord.lat + "&lon=" + city.coord.lon + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
 
     // make a request to the url
     fetch(forecastApiUrl).then(function(response) {
@@ -86,8 +87,6 @@ var displayWeather = function(data, searchTerm) {
     });
   };
 
-   userFormEl.addEventListener("submit", formSubmitHandler);
-
   var displayForecast = function(data) {
     console.log(data);
     // clear old content
@@ -96,16 +95,17 @@ var displayWeather = function(data, searchTerm) {
     // loop over data
     for (var i = 0; i < data.list.length; i++) {
     // format data
-    var {dt_txt, main, wind} = data.list[i];
-//    console.log(data.list[i].main.temp);
+    var {dt_txt, main, wind, weather} = data.list[i];
+  //  console.log(data.list[i].main.temp);
 
     let output = `
-      <div class="card" style="width: 18rem;"> 
+      <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
         <div class="card-body"
           <p class ="card-text">${dt_txt}</p>
-          <p class="card-text">Temp: ${main}</p>
-          <p class="card-text">Wind: ${wind}</p>
-          <p class="card-text">Humidity: </p>
+          <p>${weather.icon}</p>
+          <p class="card-text">Temp: ${main.temp} °F</p>
+          <p class="card-text">Wind: ${wind.speed} MPH</p>
+          <p class="card-text">Humidity: ${main.humidity} %</p>
         </div>
       </div>
     `
