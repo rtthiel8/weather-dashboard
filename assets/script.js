@@ -28,6 +28,8 @@ var getCityWeather = function(city) {
     // make a request to the url
     fetch(apiUrl).then(function(response) {
       response.json().then(function(data) {
+          console.log(data)
+          getForecast(data)
             displayWeather(data, city);
       });
     });
@@ -36,8 +38,8 @@ var getCityWeather = function(city) {
 userFormEl.addEventListener("submit", formSubmitHandler);
 
 var displayWeather = function(data, searchTerm) {
-    console.log(data.coord.lat);
-    console.log(data.coord.lon);
+  const lat = data.coord.lat
+  const lon = data.coord.lon
 //    console.log(searchTerm);
     // clear old content
     weatherContainerEl.textContent = "";
@@ -71,44 +73,44 @@ var displayWeather = function(data, searchTerm) {
 
     // append container to the dom
     weatherContainerEl.appendChild(weatherEl);
+    getForecast(lat, lon);
 
   };
 
-  var getForecast = function(city) {
+  var getForecast = function(lat, lon) {
     // format the api url
-    var forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + city.coord.lat + "&lon=" + city.coord.lon + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
-
+    var forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
     // make a request to the url
     fetch(forecastApiUrl).then(function(response) {
       response.json().then(function(data) {
 //        console.log(data);
-        displayForecast(data, city);
+        displayForecast(data);
       });
     });
   };
 
-  var displayForecast = function(data) {
-    console.log(data);
-    // clear old content
-    forecastContainerEl.textContent = "";
+   var displayForecast = function(data) {
+     console.log(data);
+     // clear old content
+     forecastContainerEl.textContent = "";
 
-    // loop over data
-    for (var i = 0; i < data.list.length; i++) {
-    // format data
-    var {dt_txt, main, wind, weather} = data.list[i];
-  //  console.log(data.list[i].main.temp);
+     // loop over data
+     for (var i = 0; i < data.daily.length; i++) {
+//     // format data
+//     var {dt, main, wind, weather} = data.daily[i];
+     console.log(data.daily);
 
-    let output = `
-      <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
-        <div class="card-body"
-          <p class ="card-text">${dt_txt}</p>
-          <p>${weather.icon}</p>
-          <p class="card-text">Temp: ${main.temp} °F</p>
-          <p class="card-text">Wind: ${wind.speed} MPH</p>
-          <p class="card-text">Humidity: ${main.humidity} %</p>
-        </div>
-      </div>
-    `
-    document.getElementById("forecast-container").innerHTML += output;
-}
-};
+//     let output = `
+//       <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
+//         <div class="card-body"
+//           <p class ="card-text">${dt}</p>
+//           <p>${weather.icon}</p>
+//           <p class="card-text">Temp: ${main.temp} °F</p>
+//           <p class="card-text">Wind: ${wind.speed} MPH</p>
+//           <p class="card-text">Humidity: ${main.humidity} %</p>
+//         </div>
+//       </div>
+//     `
+//     document.getElementById("forecast-container").innerHTML += output;
+  }
+  };
