@@ -4,6 +4,8 @@ var userFormEl = document.querySelector("#user-form");
 var cityInputEl = document.querySelector("#city")
 var forecastContainerEl = document.querySelector("#forecast-container");
 var dateToday = moment().format('l');
+var citySearchHistory = [];
+var cityHistoryEl = document.querySelector("#city-storage");
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -13,7 +15,7 @@ var city = cityInputEl.value.trim();
 
     if (city) {
       getCityWeather(city);
-
+      saveCityHistory(city);
       cityInputEl.value = "";
     } else {
       alert("Please enter a valid City");
@@ -34,7 +36,7 @@ var getCityWeather = function(city) {
     });
   };
 
-userFormEl.addEventListener("submit", formSubmitHandler);
+
 
 var displayWeather = function(data, searchTerm) {
   const lat = data.coord.lat;
@@ -116,3 +118,26 @@ var displayForecast = function(data) {
     document.getElementById("weather-container").appendChild(weatherIconEl);
 
   };
+
+  var saveCityHistory = function(city) {
+    if (!citySearchHistory.includes(city)) {
+      citySearchHistory.push(city);
+      console.log(citySearchHistory);
+      cityButtonMaker(city);
+    }
+    saveCity(citySearchHistory);
+  };
+
+  var saveCity = function (cityHistory) {
+    localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
+  };
+
+  var cityButtonMaker = function (city) {
+    var citySearchHistoryEl = document.createElement("button");
+    citySearchHistoryEl.className = "btn btn-secondary";
+    citySearchHistoryEl.innerText = city;
+    cityHistoryEl.append(citySearchHistoryEl);
+    citySearchHistoryEl.addEventListener("click", () => getCityWeather(city));
+  };
+
+  userFormEl.addEventListener("submit", formSubmitHandler);
