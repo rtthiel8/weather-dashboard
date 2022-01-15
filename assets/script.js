@@ -29,6 +29,7 @@ var getCityWeather = function(city) {
     fetch(apiUrl).then(function(response) {
       response.json().then(function(data) {
             displayWeather(data, city);
+            console.log(data);
       });
     });
   };
@@ -40,7 +41,7 @@ var displayWeather = function(data, searchTerm) {
   const lon = data.coord.lon;
     // clear old content
     weatherContainerEl.textContent = "";
-    citySearchTerm.textContent = "Current Weather for: " + searchTerm + (" (") + dateToday + (")");
+    citySearchTerm.textContent = "Current Weather for: " + searchTerm + (" (") + dateToday + (")") ;
 
     // create a container for each stat
     var weatherEl = document.createElement("div");
@@ -60,18 +61,12 @@ var displayWeather = function(data, searchTerm) {
     humidityEl.textContent = "Humidity: " + humidity + " %";
     weatherEl.appendChild(humidityEl);
   
-    var weatherIcon = data.weather.icon;
-    var weatherIconEl = document.createElement("div");
-    weatherIconEl.textContent = "Weather Icon: " + weatherIcon;
-    weatherEl.appendChild(weatherIconEl);
-//    console.log(weatherIcon);
-
     // append container to the dom
     weatherContainerEl.appendChild(weatherEl);
     getForecast(lat, lon);
 
   };
-
+  
 var getForecast = function(lat, lon) {
     // format the api url
     var forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=1a9e1beac3e10cf54f1426a2f0ed425b&units=imperial";
@@ -90,16 +85,18 @@ var displayForecast = function(data) {
      forecastContainerEl.textContent = "";
 
      // loop over data
-     for (var i = 0; i < data.daily.length; i++) {
+     for (var i = 1; i < data.daily.length-2; i++) {
 //     // format data
      var {dt, weather, temp, wind_speed, humidity} = data.daily[i];
      console.log(data.daily);
 
+    let day = moment.unix(dt).utc().format("ll");
+
     let output = `
       <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
         <div class="card-body"
-          <p class="card-text">${dt}</p>
-          <p class="card-text">${weather.icon}</p>
+          <p class="card-text">${day}</p>
+          <p class="card-text">${weather[0].icon}</p>
           <p class="card-text">Temp: ${temp.day} °F</p>
           <p class="card-text">Wind: ${wind_speed} MPH</p>
           <p class="card-text">Humidity: ${humidity} %</p>
@@ -108,4 +105,14 @@ var displayForecast = function(data) {
     `
     document.getElementById("forecast-container").innerHTML += output;
   }
+    var uvIndex = data.current.uvi;
+    var uvIndexEl = document.createElement("div");
+    uvIndexEl.textContent = "UV Index: " + uvIndex; 
+    document.getElementById("weather-container").appendChild(uvIndexEl);
+
+    var weatherIcon = weather[0].icon;
+    var weatherIconEl = document.createElement("div");
+    weatherIconEl.textContent = weatherIcon;
+    document.getElementById("weather-container").appendChild(weatherIconEl);
+
   };
