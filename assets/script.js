@@ -36,8 +36,6 @@ var getCityWeather = function(city) {
     });
   };
 
-
-
 var displayWeather = function(data, searchTerm) {
   const lat = data.coord.lat;
   const lon = data.coord.lon;
@@ -119,6 +117,7 @@ var displayForecast = function(data) {
 
   };
 
+// save searches to new array
   var saveCityHistory = function(city) {
     if (!citySearchHistory.includes(city)) {
       citySearchHistory.push(city);
@@ -128,10 +127,12 @@ var displayForecast = function(data) {
     saveCity(citySearchHistory);
   };
 
+// save array to local storage
   var saveCity = function (cityHistory) {
     localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
   };
 
+// make button for each new city search
   var cityButtonMaker = function (city) {
     var citySearchHistoryEl = document.createElement("button");
     citySearchHistoryEl.className = "btn btn-secondary";
@@ -140,4 +141,15 @@ var displayForecast = function(data) {
     citySearchHistoryEl.addEventListener("click", () => getCityWeather(city));
   };
 
+// show past searches when reloading page
+  var loadSearchHistory = function() {
+    var loadCityHistory = localStorage.getItem("cityHistory");
+    var parsedCityHistory = JSON.parse(loadCityHistory);
+    console.log(parsedCityHistory);
+    if (parsedCityHistory) {
+      parsedCityHistory.forEach(cityButtonMaker);
+    } 
+  };
+
   userFormEl.addEventListener("submit", formSubmitHandler);
+  window.onload = loadSearchHistory;
