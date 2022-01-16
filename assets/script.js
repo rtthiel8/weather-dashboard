@@ -7,6 +7,7 @@ var dateToday = moment().format('l');
 var citySearchHistory = [];
 var cityHistoryEl = document.querySelector("#city-storage");
 
+
 var formSubmitHandler = function(event) {
     event.preventDefault();
     
@@ -93,7 +94,7 @@ var displayForecast = function(data) {
     let day = moment.unix(dt).utc().format("ll");
 
     let output = `
-      <div class="card text-white bg-dark m-3" style="width: 14rem;"> 
+      <div class="card text-white bg-dark m-3" style="width: 12rem;"> 
         <div class="card-body"
           <p class="card-text">${day}</p>
           <p class="card-text">${weather[0].icon}</p>
