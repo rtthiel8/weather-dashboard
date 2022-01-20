@@ -97,7 +97,7 @@ var displayForecast = function(data) {
       <div class="card text-white bg-dark m-3" style="width: 12rem;"> 
         <div class="card-body"
           <p class="card-text">${day}</p>
-          <p class="card-text">${weather[0].icon}</p>
+          <img src="https://openweathermap.org/img/w/${weather[0].icon}.png">
           <p class="card-text">Temp: ${temp.day} °F</p>
           <p class="card-text">Wind: ${wind_speed} MPH</p>
           <p class="card-text">Humidity: ${humidity} %</p>
@@ -107,14 +107,17 @@ var displayForecast = function(data) {
     document.getElementById("forecast-container").innerHTML += output;
   }
     var uvIndex = data.current.uvi;
-    var uvIndexEl = document.createElement("div");
-    uvIndexEl.textContent = "UV Index: " + uvIndex; 
+    var uvIndexEl = document.createElement("span");
+    uvIndexEl.textContent =  + uvIndex;
+    uvIndexEl.style.backgroundColor = uvIndex <= 2 ? 'green' : uvIndex <= 5 ? 'yellow' : uvIndex <= 7 ? 'orange' : 'red'
+    uvIndexEl.style.padding = '2px';
+    document.getElementById("weather-container").innerHTML += "UV Index: ";
     document.getElementById("weather-container").appendChild(uvIndexEl);
 
-    var weatherIcon = weather[0].icon;
+    var weatherIcon =  `<img src="https://openweathermap.org/img/w/${weather[0].icon}.png">`
     var weatherIconEl = document.createElement("div");
-    weatherIconEl.textContent = weatherIcon;
-    document.getElementById("weather-container").appendChild(weatherIconEl);
+    weatherIconEl.innerHTML = weatherIcon;
+    document.getElementById("city-search-term").innerHTML += weatherIcon;
 
   };
 
@@ -130,7 +133,11 @@ var displayForecast = function(data) {
 
 // save array to local storage
   var saveCity = function (cityHistory) {
-    localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
+    let history = localStorage.cityHistory;
+    if(history == undefined) {
+      history = JSON.stringify(cityHistory);
+    };
+
   };
 
 // make button for each new city search
